@@ -2,18 +2,28 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-
-import { OrderModule } from './modules/order/order.module';
-
-import { Order } from './modules/order/entities/order.entity';
+import { Order } from '../../modules/order/entities/order.entity';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    OrderModule,
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: `amqp://${configService.get('RABBIT_HOST')}`,
+        exchanges: [
+          {
+            name: 'event.exchange',
+            type: 'topic',
+          },
+        ],
+      }),
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -29,7 +39,7 @@ import { Order } from './modules/order/entities/order.entity';
       }),
     }),
   ],
-  controllers: [AppController],
-  providers: [],
+  controllers: [],
+  providers: [AppService],
 })
 export class AppModule {}

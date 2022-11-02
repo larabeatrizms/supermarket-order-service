@@ -29,6 +29,7 @@ services:
       - database
     build:
       context: ./
+    command: npm run start:tcp:prod
     # Specify the port and protocol the service listens on
     interfaces:
       main:
@@ -41,11 +42,40 @@ services:
       DB_PORT: 5432
       DB_NAME: ${{ secrets.db_name }}
       PORT: 8082
+      RABBIT_CONSUMER_PORT: 8083
       HOST: "0.0.0.0"
       RABBIT_HOST: ${{ dependencies.supermarket-product-service.interfaces.amqp.host }}
     # Mount our src directory to the container and use our dev command so we get hot-reloading
     debug:
-      command: npm run start:dev
+      command: npm run start:tcp:dev
+      volumes:
+        src:
+          host_path: ./src/
+          mount_path: /usr/src/app/src/
+  rabbitmq-consumer:
+    depends_on:
+      - database
+    build:
+      context: ./
+    command: npm run start:rabbitmq:prod
+    # Specify the port and protocol the service listens on
+    interfaces:
+      main:
+        port: 8082
+        protocol: tcp
+    environment:
+      DB_PASSWORD: ${{ secrets.db_pass }}
+      DB_USERNAME: ${{ secrets.db_user }}
+      DB_HOST: ${{ services.database.interfaces.pg.host }}
+      DB_PORT: 5432
+      DB_NAME: ${{ secrets.db_name }}
+      PORT: 8082
+      RABBIT_CONSUMER_PORT: 8083
+      HOST: "0.0.0.0"
+      RABBIT_HOST: ${{ dependencies.supermarket-product-service.interfaces.amqp.host }}
+    # Mount our src directory to the container and use our dev command so we get hot-reloading
+    debug:
+      command: npm run start:rabbitmq:dev
       volumes:
         src:
           host_path: ./src/

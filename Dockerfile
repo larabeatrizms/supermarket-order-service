@@ -16,4 +16,4 @@ RUN npm run build
 RUN rm -r src
 
 # Assign `npm run start:prod` as the default command to run when booting the container
-CMD ["npm", "run", "start:prod"]
+# CMD ["npm", "run", "start:prod"]
