@@ -19,7 +19,7 @@ export class CreateOrderService {
 
       this.logger.log('Validating fields...');
 
-      const { category_id, payment_id, shipment_id, status_code_id } = data;
+      const { customer_id } = data;
 
       // const category = await this.categoryRepository.findOneById(
       //   data.category_id,
@@ -30,10 +30,10 @@ export class CreateOrderService {
       // }
 
       const order = await this.orderRepository.create({
-        category_id,
-        payment_id,
-        shipment_id,
-        status_code_id,
+        customer_id,
+        payment_id: 1,
+        shipment_id: 1,
+        status_code_id: 1,
       });
 
       this.logger.log(`Order created! ID: ${order.id}`);
