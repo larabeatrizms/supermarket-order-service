@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { OrderModule } from '../../modules/order/order.module';
 
 import { Order } from '../../modules/order/entities/order.entity';
+import { Item } from 'src/modules/items/entities/item.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { Order } from '../../modules/order/entities/order.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Order],
+        entities: [Order, Item],
         synchronize: true,
       }),
     }),
