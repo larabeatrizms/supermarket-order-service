@@ -1,32 +1,40 @@
-import { OrderItem } from 'src/modules/order/entities/order-item.entity';
+import { Item } from 'src/modules/items/entities/item.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  OneToOne,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Order } from './order.entity';
 
 @Entity()
-export class Item {
+export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  integration_id: number;
+  order_id: number;
 
   @Column()
-  name: string;
+  item_id: number;
 
-  @Column({ type: 'float' })
+  @Column()
+  quantity: number;
+
+  @Column()
   price: number;
 
-  @Column()
-  image: string;
+  @OneToOne(() => Item, (item) => item.orderItems)
+  @JoinColumn({ name: 'item_id' })
+  item: Item;
 
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.item)
-  orderItems: OrderItem[];
+  @ManyToOne(() => Order, (order) => order.items)
+  @JoinColumn({ name: 'order_id' })
+  order: Order;
 
   @CreateDateColumn({
     name: 'created_at',

@@ -8,6 +8,9 @@ import { OrderModule } from '../../modules/order/order.module';
 
 import { Order } from '../../modules/order/entities/order.entity';
 import { Item } from 'src/modules/items/entities/item.entity';
+import { OrderItem } from 'src/modules/order/entities/order-item.entity';
+import { OrderPayment } from 'src/modules/order/entities/order-payment.entity';
+import { OrderShipment } from 'src/modules/order/entities/order-shipment.entity';
 
 @Module({
   imports: [
@@ -25,7 +28,7 @@ import { Item } from 'src/modules/items/entities/item.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Order, Item],
+        entities: [Order, Item, OrderItem, OrderPayment, OrderShipment],
         synchronize: true,
       }),
     }),
