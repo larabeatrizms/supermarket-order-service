@@ -25,10 +25,10 @@ export class OrderItem {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({ type: 'float' })
   price: number;
 
-  @OneToOne(() => Item, (item) => item.orderItems)
+  @ManyToOne(() => Item, (item) => item.orderItems)
   @JoinColumn({ name: 'item_id' })
   item: Item;
 

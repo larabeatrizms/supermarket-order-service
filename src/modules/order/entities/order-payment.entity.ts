@@ -15,7 +15,7 @@ export class OrderPayment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'float' })
   amount: number;
 
   @Column({
