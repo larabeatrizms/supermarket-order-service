@@ -32,9 +32,9 @@ export class CreateOrderService {
     try {
       this.logger.log('Creating a order...');
 
-      this.logger.log('Validating fields...');
-
       const { customer_id, items, shipment, payment } = data;
+
+      this.logger.log('Searching products...');
 
       // Busca Id do item com base no "product_id" recebido.
       // Valida se o valor do Item encontrado é o mesmo do recebido.
@@ -65,13 +65,15 @@ export class CreateOrderService {
         }),
       );
 
-      console.log({ orderItemsToCreate });
+      this.logger.log('Creating order shipment...');
 
       // Cria OrderShipment com o endereço recebido.
       const orderShipment = await this.orderShipmentRepository.create({
         zipcode: shipment.zipcode,
         to_address: shipment.to_address,
       });
+
+      this.logger.log('Creating order payment...');
 
       const orderPaymentAmount = items.reduce(
         (pV, cV) => pV + cV.price * cV.quantity,
@@ -85,6 +87,8 @@ export class CreateOrderService {
         status: EOrderPaymentStatus.CONCLUDED,
       });
 
+      this.logger.log('Creating order...');
+
       // Cria pedido com OrderPayment, OrderShipment e status inicial.
       const order = await this.orderRepository.create({
         customer_id,
@@ -92,6 +96,8 @@ export class CreateOrderService {
         shipment_id: orderShipment.id,
         status: EOrderStatusCode.PLACED,
       });
+
+      this.logger.log('Creating order items...');
 
       // Cria OrderItem com os items enviados.
       // Vincula Item com OrderItem.
