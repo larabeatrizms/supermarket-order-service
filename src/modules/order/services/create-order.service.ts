@@ -11,6 +11,7 @@ import { OrderShipmentRepositoryInterface } from '../repositories/order-shipment
 import { OrderPaymentRepositoryInterface } from '../repositories/order-payment/order-payment.interface.repository';
 import { EOrderPaymentStatus } from '../enums/order-payment-status.enum';
 import { EOrderStatusCode } from '../enums/order-status-code.enum';
+import { CustomerRepositoryInterface } from 'src/modules/customers/repositories/customer/customer.interface.repository';
 
 export class CreateOrderService {
   private readonly logger = new Logger(CreateOrderService.name);
@@ -26,13 +27,27 @@ export class CreateOrderService {
     private readonly orderShipmentRepository: OrderShipmentRepositoryInterface,
     @Inject('OrderPaymentRepositoryInterface')
     private readonly orderPaymentRepository: OrderPaymentRepositoryInterface,
+    @Inject('CustomerRepositoryInterface')
+    private readonly customerRepository: CustomerRepositoryInterface,
   ) {}
 
   async execute(data: CreateOrderDto): Promise<ISuccessResponse | Error> {
     try {
       this.logger.log('Creating a order...');
 
-      const { customer_id, items, shipment, payment } = data;
+      const { user_id, items, shipment, payment } = data;
+
+      this.logger.log('Searching customer...');
+
+      const customer = await this.customerRepository.findOneByCondition({
+        integration_id: user_id,
+      });
+
+      console.log(customer);
+
+      if (!customer) {
+        throw new RpcException(`Cliente não encontrado!`);
+      }
 
       this.logger.log('Searching products...');
 
@@ -91,7 +106,7 @@ export class CreateOrderService {
 
       // Cria pedido com OrderPayment, OrderShipment e status inicial.
       const order = await this.orderRepository.create({
-        customer_id,
+        customer_id: customer.id,
         payment_id: orderPayment.id,
         shipment_id: orderShipment.id,
         status: EOrderStatusCode.PLACED,

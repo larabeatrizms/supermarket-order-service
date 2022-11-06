@@ -16,7 +16,7 @@ export interface CreateOrderItemDto {
 }
 
 export interface CreateOrderDto {
-  customer_id: number;
+  user_id: number;
   shipment: CreateOrderShipmentDto;
   payment: CreateOrderPaymentDto;
   items: CreateOrderItemDto[];
