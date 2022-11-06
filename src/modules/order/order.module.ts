@@ -20,6 +20,7 @@ import { OrderShipmentRepository } from './repositories/order-shipment/order-shi
 import { CustomerRepository } from '../customers/repositories/customer/customer.repository';
 import { Customer } from '../customers/entities/customer.entity';
 import { FindOrderByIdService } from './services/find-order-by-id.service';
+import { FindOrdersByFieldsService } from './services/find-order-by-fields.service';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { FindOrderByIdService } from './services/find-order-by-id.service';
     CreateOrderService,
     UpdateOrderService,
     FindOrderByIdService,
+    FindOrdersByFieldsService,
     {
       provide: 'OrderRepositoryInterface',
       useClass: OrderRepository,

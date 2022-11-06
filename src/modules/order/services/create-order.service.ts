@@ -43,8 +43,6 @@ export class CreateOrderService {
         integration_id: user_id,
       });
 
-      console.log(customer);
-
       if (!customer) {
         throw new RpcException(`Cliente não encontrado!`);
       }
