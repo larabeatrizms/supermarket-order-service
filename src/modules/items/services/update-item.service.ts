@@ -1,6 +1,5 @@
 import { Inject, Logger } from '@nestjs/common';
 
-import { CreateItemDto } from '../dtos/create-item.dto';
 import { RpcException } from '@nestjs/microservices';
 import { ISuccessResponse } from 'src/shared/interfaces/SuccessResponse.interface';
 import { ItemRepositoryInterface } from '../repositories/item/item.interface.repository';

@@ -11,6 +11,7 @@ import { Item } from 'src/modules/items/entities/item.entity';
 import { OrderItem } from 'src/modules/order/entities/order-item.entity';
 import { OrderPayment } from 'src/modules/order/entities/order-payment.entity';
 import { OrderShipment } from 'src/modules/order/entities/order-shipment.entity';
+import { Customer } from 'src/modules/customers/entities/customer.entity';
 
 @Module({
   imports: [
@@ -28,7 +29,14 @@ import { OrderShipment } from 'src/modules/order/entities/order-shipment.entity'
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Order, Item, OrderItem, OrderPayment, OrderShipment],
+        entities: [
+          Order,
+          Item,
+          OrderItem,
+          OrderPayment,
+          OrderShipment,
+          Customer,
+        ],
         synchronize: true,
       }),
     }),

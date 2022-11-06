@@ -6,8 +6,11 @@ import { Order } from '../../modules/order/entities/order.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 
 import { ItemModule } from 'src/modules/items/item.module';
+import { CustomerModule } from 'src/modules/customers/customer.module';
+
 import { Item } from 'src/modules/items/entities/item.entity';
 import { OrderItem } from 'src/modules/order/entities/order-item.entity';
+import { Customer } from 'src/modules/customers/entities/customer.entity';
 import { OrderPayment } from 'src/modules/order/entities/order-payment.entity';
 import { OrderShipment } from 'src/modules/order/entities/order-shipment.entity';
 
@@ -17,6 +20,7 @@ import { OrderShipment } from 'src/modules/order/entities/order-shipment.entity'
       isGlobal: true,
     }),
     ItemModule,
+    CustomerModule,
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -40,7 +44,14 @@ import { OrderShipment } from 'src/modules/order/entities/order-shipment.entity'
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [Order, Item, OrderItem, OrderPayment, OrderShipment],
+        entities: [
+          Order,
+          Item,
+          OrderItem,
+          OrderPayment,
+          OrderShipment,
+          Customer,
+        ],
         synchronize: true,
       }),
     }),

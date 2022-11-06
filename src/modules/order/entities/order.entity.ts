@@ -1,3 +1,4 @@
+import { Customer } from 'src/modules/customers/entities/customer.entity';
 import {
   Entity,
   Column,
@@ -7,6 +8,8 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
+  ManyToOne,
+  DeleteDateColumn,
 } from 'typeorm';
 import { EOrderStatusCode } from '../enums/order-status-code.enum';
 import { IOrder } from '../interfaces/order.interface';
@@ -46,6 +49,12 @@ export class Order implements IOrder {
   @JoinColumn({ name: 'payment_id' })
   payment: OrderPayment;
 
+  @ManyToOne(() => Customer, (customer) => customer.orders, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'customer_id' })
+  customer: Customer;
+
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
@@ -61,4 +70,7 @@ export class Order implements IOrder {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
