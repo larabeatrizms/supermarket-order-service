@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -43,4 +44,7 @@ export class Item {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

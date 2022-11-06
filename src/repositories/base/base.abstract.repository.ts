@@ -49,7 +49,11 @@ export abstract class BaseAbstractRepository<T>
     return await this.entity.find();
   }
 
-  public async remove(id: string): Promise<DeleteResult> {
+  public async remove(id: number): Promise<DeleteResult> {
     return await this.entity.delete(id);
+  }
+
+  public async softRemove(id: number): Promise<DeleteResult> {
+    return await this.entity.softDelete(id);
   }
 }
